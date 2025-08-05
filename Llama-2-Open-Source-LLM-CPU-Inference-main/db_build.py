@@ -26,6 +26,9 @@ def run_db_build():
     embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
                                        model_kwargs={'device': 'cpu'})
 
+    # AICI trb sa fac si pt imagini
+    # Chunk de imagini trb sa contina img_path si metadata
+
     vectorstore = FAISS.from_documents(texts, embeddings)
     vectorstore.save_local(cfg.DB_FAISS_PATH)
 
