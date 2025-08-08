@@ -3,22 +3,12 @@
 # =========================
 import box
 import yaml
-from langchain_community.llms import LlamaCpp
-from langchain.chains.llm import LLMChain
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_core.prompts import PromptTemplate
-from langchain_core.vectorstores import InMemoryVectorStore
-from langchain_core.documents import Document
 from langchain_community.document_loaders import JSONLoader
 import json
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-
-from langchain.llms import LlamaCpp
-from time import monotonic
 
 # Import config vars
 with open('config/config.yml', 'r', encoding='utf8') as ymlfile:
@@ -59,35 +49,33 @@ def get_image(query):
     results = vector_store.similarity_search(query, k=1)
 
     pth = ''
+    description = ''
     for doc in results:
         content = json.loads(doc.page_content)
-        print(content['text'])
+        description = content['text']
         pth = content['metadata']['image_path']
-        print(pth)
 
-    img = mpimg.imread(pth)
-    imgplot = plt.imshow(img)
-    plt.show()
+    return pth, description
 
 
-def llama_chat():
-    llm = LlamaCpp(
-        model_path="models/llama-2-7b-chat.ggmlv3.q4_1.bin",
-        temperature=0.7,
-        max_tokens=512,
-        top_p=1
-    )
-
-    template = ""
-    prompt = PromptTemplate(template=template, input_variables=["text"])
-    chain = LLMChain(prompt=prompt, llm=llm)
-    start_time = monotonic()
-    # desc = chain.run(docs)
-    print(f"Run time: {monotonic() - start_time} seconds")
-    # print(desc)
-    return None
+# def llama_chat():
+#     llm = LlamaCpp(
+#         model_path="models/llama-2-7b-chat.ggmlv3.q4_1.bin",
+#         temperature=0.7,
+#         max_tokens=512,
+#         top_p=1
+#     )
+#
+#     template = ""
+#     prompt = PromptTemplate(template=template, input_variables=["text"])
+#     chain = LLMChain(prompt=prompt, llm=llm)
+#     start_time = monotonic()
+#     # desc = chain.run(docs)
+#     print(f"Run time: {monotonic() - start_time} seconds")
+#     # print(desc)
+#     return None
 
 
 if __name__ == "__main__":
-    query = "Show me the image with a man on a golden field, and the sun is up with clouds"
+    query = "Show me the image with the woman and the kid"
     get_image(query)
