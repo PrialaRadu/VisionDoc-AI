@@ -4,8 +4,13 @@ import PIL.Image
 import io
 from docx2pdf import convert
 import json
+from concurrent.futures import ThreadPoolExecutor
 from llama_describe_image import get_description_llama
 
+
+def save_image(data, img_dir, page, idx):
+    with PIL.Image.open(io.BytesIO(data.get('image'))) as image:
+        image.save(f'{img_dir}/pg{page}-img{idx}.{data.get("ext")}')
 
 def extract_images(pdf, page, img_dir):
     img_list = pdf[page].get_images()
@@ -13,8 +18,8 @@ def extract_images(pdf, page, img_dir):
     if img_list:
         for idx, img in enumerate(img_list, start=1):
             data = pdf.extract_image(img[0])
-            with PIL.Image.open(io.BytesIO(data.get('image'))) as image:
-                image.save(f'{img_dir}/pg{page}-img{idx}.{data.get("ext")}')
+            save_image(data, img_dir, page, idx)
+
 
 def images_data(img_dir):
     results = []
@@ -24,8 +29,7 @@ def images_data(img_dir):
         })
     return results
 
-def extract_text_near_images(pdf_path, expand=50):
-    doc = fitz.open(pdf_path)
+def extract_text_near_images(doc, expand=50):
     results = []
     for page_number in range(len(doc)):
         page = doc[page_number]
@@ -58,11 +62,20 @@ def extract_text_near_images(pdf_path, expand=50):
 
 def metadata(image_data, text_data):
     data = []
-    for i in range(len(image_data)):
-        data.append(image_data[i])
-        data[i]['metadata'] = text_data[i]
-        data[i]['metadata']['description'] = get_description_llama(data[i]['image_path'])
-        print(f"datele despre imaginea {i} au fost salvate")
+
+    for i, img in enumerate(image_data):
+        item = img.copy()
+        if i < len(text_data):
+            item['metadata'] = text_data[i]
+        else:
+            item['metadata'] = {"page": None, "image_bbox": None, "nearby_text": ""}
+        data.append(item)
+
+    for item in data:
+        desc = get_description_llama(item['image_path'])
+        item['metadata']['description'] = desc
+        print(desc)
+
     return data
 
 def convert_to_pdf(fpath):
@@ -73,19 +86,18 @@ def convert_to_pdf(fpath):
         pdf_path = fpath
     return pdf_path
 
-def main():
-    filepath = "data/PP.pdf"
+def retrieve_images():
+    filepath = "data/Porsche_US Cayenne_Turbo_2006.pdf"
     pdf_path = convert_to_pdf(filepath)
     pdf = fitz.open(pdf_path)
     for page in range(pdf.page_count):
-        extract_images(pdf, page, 'img2')
-    final_data = metadata(images_data('img2'), extract_text_near_images(pdf_path))
+        extract_images(pdf, page, 'porsche_2006')
+    final_data = metadata(images_data('porsche_2006'), extract_text_near_images(pdf))
     for x in final_data:
         print(x)
-    with open('data2.json', 'w', encoding='utf-8') as f:
+    with open('porsche_2006.json', 'w', encoding='utf-8') as f:
         json.dump(final_data, f, ensure_ascii=False, indent=4)
 
 
-
 if __name__ == '__main__':
-    main()
+    retrieve_images()
