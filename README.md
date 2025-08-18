@@ -9,3 +9,5 @@ A GenAI system that interprets and semantically links embedded images within nar
 6.	Builds a chatbot using retrieval-augmented generation (RAG) over vector data.
 7.	Ensures chunk provenance (page, image position) is preserved.
 8.	Implements access control and role-based user permissions.
+
+9.	![Workflow Image]("C:\Users\rpriala\Downloads\workflow.png")
