@@ -10,4 +10,4 @@ A GenAI system that interprets and semantically links embedded images within nar
 7.	Ensures chunk provenance (page, image position) is preserved.
 8.	Implements access control and role-based user permissions.
 
-9.	![Workflow Image]("C:\Users\rpriala\Downloads\workflow.png")
+9.	![Workflow Image]("workflow.png")
