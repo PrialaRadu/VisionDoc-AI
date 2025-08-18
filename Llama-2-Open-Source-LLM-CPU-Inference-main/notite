@@ -1,8 +1,0 @@
-MODELS
-['RN50', 'RN101', 'RN50x4', 'RN50x16', 'RN50x64', 'ViT-B/32', 'ViT-B/16', 'ViT-L/14', 'ViT-L/14@336px']
-
-RN101 = 8.03s
-RN50x4 = 9s
-RN50x16 = 13.12s
-ViT-B/32 = 7.30s
-ViT-L/14@336px = 18s
