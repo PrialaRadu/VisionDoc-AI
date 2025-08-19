@@ -4,8 +4,8 @@ import PIL.Image
 import io
 from docx2pdf import convert
 import json
-from concurrent.futures import ThreadPoolExecutor
 from llama_describe_image import get_description_llama
+import docx2txt
 
 
 def save_image(data, img_dir, page, idx):
@@ -86,18 +86,25 @@ def convert_to_pdf(fpath):
         pdf_path = fpath
     return pdf_path
 
-def retrieve_images():
-    filepath = "data/Porsche_US Cayenne_Turbo_2006.pdf"
-    pdf_path = convert_to_pdf(filepath)
-    pdf = fitz.open(pdf_path)
-    for page in range(pdf.page_count):
-        extract_images(pdf, page, 'porsche_2006')
-    final_data = metadata(images_data('porsche_2006'), extract_text_near_images(pdf))
-    for x in final_data:
-        print(x)
-    with open('porsche_2006.json', 'w', encoding='utf-8') as f:
-        json.dump(final_data, f, ensure_ascii=False, indent=4)
+def extract_docx(fpath, name):
+    os.makedirs(name, exist_ok=True)
+    docx2txt.process(fpath, name)
+
+def retrieve_images(filepath, name):
+    if filepath.lower().endswith(".docx"):
+        extract_docx(filepath, name)
+    if filepath.lower().endswith(".pdf"):
+        pdf = fitz.open(filepath)
+        for page in range(pdf.page_count):
+            extract_images(pdf, page, name)
+        final_data = metadata(images_data(name), extract_text_near_images(pdf))
+        for x in final_data:
+            print(x)
+        with open(f'{name}.json', 'w', encoding='utf-8') as f:
+            json.dump(final_data, f, ensure_ascii=False, indent=4)
+    else:
+        raise Exception(f"Unsupported file type (no PDF or DOCX): {filepath.lower()}")
 
 
 if __name__ == '__main__':
-    retrieve_images()
+    extract_docx("data/Porsche_US Cayenne_Turbo_2006.docx", "Porsche_US")

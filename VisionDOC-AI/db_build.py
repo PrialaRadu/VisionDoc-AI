@@ -15,24 +15,6 @@ with open('config/config.yml', 'r', encoding='utf8') as ymlfile:
     cfg = box.Box(yaml.safe_load(ymlfile))
 
 
-# Build vector database
-# db de la starting project
-# def run_db_build():
-#     loader = DirectoryLoader(cfg.DATA_PATH,
-#                              glob='*.pdf',
-#                              loader_cls=PyPDFLoader)
-#     documents = loader.load()
-#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=cfg.CHUNK_SIZE,
-#                                                    chunk_overlap=cfg.CHUNK_OVERLAP)
-#     texts = text_splitter.split_documents(documents)
-#
-#     embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
-#                                        model_kwargs={'device': 'cpu'})
-#
-#     vectorstore = FAISS.from_documents(texts, embeddings)
-#     vectorstore.save_local(cfg.DB_FAISS_PATH)
-
-
 def load_documents_from_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -62,7 +44,6 @@ def get_image(query):
         jq_schema='.[] | {text: (.metadata.nearby_text + "\n" + .metadata.description), metadata: {image_path: .image_path}}',
         text_content=False
     )
-    # .metadata.nearby_text + "\n" +
     docs = loader.load()
 
     embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
