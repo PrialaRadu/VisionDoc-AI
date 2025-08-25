@@ -1,7 +1,0 @@
-users:
-  user1:
-    password: user1pwd
-    role: admin
-  user2:
-    password: user2pwd
-    role: viewer
