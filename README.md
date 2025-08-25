@@ -11,7 +11,14 @@ A GenAI system that interprets and semantically links embedded images within nar
 8.	Implements access control and role-based user permissions.
 
 # PURPOSE
-![Project Purpose Image](project_purpose.png)
+Let's take for example an auto brochure for Porsche Cayenne Turbo 2006. 
+![Project Purpose Image 1](projectpurpose1.png)
+
+The project identifies each image and relevant text near it.
+![Project Purpose Image 2](projectpurpose2.png)
+
+A description for each image is also created. Whenever the user asks for an image, he receive the most relevant picture.
+![Project Purpose Image 3](projectpurpose3.png)
 
 # LOGIC:
 ![Workflow Image](workflow.png)
