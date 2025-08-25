@@ -16,7 +16,9 @@ A GenAI system that interprets and semantically links embedded images within nar
 # USAGE:
 
 Step 1: Add your desired documents into VisionDOC-AI/documents directory (remove any existing documents if you don't intend to use them)
+
 Step 2: Run documents_extraction.py (extracts information about documents)
+
 Step 3: Run main.py
 While running main.py:
 - use user: 'user1' and password: 'user1pwd' for admin permissions
