@@ -12,16 +12,16 @@ A GenAI system that interprets and semantically links embedded images within nar
 
 # PURPOSE
 Let's take for example an auto brochure for Porsche Cayenne Turbo 2006. 
-![Project Purpose Image 1](projectpurpose1.png)
+![Project Purpose Image 1](explanation/projectpurpose1.png)
 
 It identifies each image and relevant text near it.
-![Project Purpose Image 2](projectpurpose2.png)
+![Project Purpose Image 2](explanation/projectpurpose2.png)
 
 A description for each image is also created. Whenever the user asks for an image, he receives the most relevant picture.
-![Project Purpose Image 3](projectpurpose3.png)
+![Project Purpose Image 3](explanation/projectpurpose3.png)
 
 # LOGIC:
-![Workflow Image](workflow.png)
+![Workflow Image](explanation/workflow.png)
 
 # USAGE:
 
