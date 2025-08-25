@@ -10,6 +10,9 @@ A GenAI system that interprets and semantically links embedded images within nar
 7.	Ensures chunk provenance (page, image position) is preserved.
 8.	Implements access control and role-based user permissions.
 
+# PURPOSE
+![Project Purpose Image](project_purpose.png)
+
 # LOGIC:
 ![Workflow Image](workflow.png)
 
