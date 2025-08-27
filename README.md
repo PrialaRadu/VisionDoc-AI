@@ -20,6 +20,9 @@ It identifies each image and relevant text near it.
 A description for each image is also created. Whenever the user asks for an image, he receives the most relevant picture.
 ![Project Purpose Image 3](explanation/projectpurpose3.png)
 
+The projects supports Q&A retrieval on multiple docx and pdf files.
+![Porject Purpose Image 4](explanation/projectpurpose4.png)
+
 # LOGIC:
 ![Workflow Image](explanation/workflow.png)
 
