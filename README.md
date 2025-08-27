@@ -30,11 +30,11 @@ The projects supports Q&A retrieval on multiple docx and pdf files.
 
 Step 1: Add your desired documents into VisionDOC-AI/documents directory (remove any existing documents if you don't intend to use them)
 
-Step 2: Run documents_extraction.py (extracts information about documents)
+Step 2: Run extraction/documents_extraction.py (extracts information about documents)
 
-Step 3: Run main.py
+Step 3: Run db_build.py (storing information into vectorstore)
 
-While running main.py:
-- use user: 'user1' and password: 'user1pwd' for admin permissions
-- type the filename of your desired document file (e.g.: Cayenne_Turbo_2006.pdf)
+Step 4: Run main.py for console application / Run app.py for web chatbot interface
+
+- use user: 'admin' and password: 'adminpwd' for admin permissions
 - now, you can ask the model about any image that exists in the document
