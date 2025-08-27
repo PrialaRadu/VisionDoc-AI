@@ -6,5 +6,5 @@ DATA_PATH: 'documents/'
 DB_FAISS_PATH: 'vectorstore/db_faiss'
 MODEL_TYPE: 'llama'
 MODEL_BIN_PATH: 'models/llama-2-7b-chat.ggmlv3.q4_K_M.bin'
-MAX_NEW_TOKENS: 100
-TEMPERATURE: 0.3
+MAX_NEW_TOKENS: 1000
+TEMPERATURE: 0.4

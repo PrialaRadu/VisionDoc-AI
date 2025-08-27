@@ -1,4 +1,5 @@
 import os
+from abc import abstractmethod, ABC
 import fitz
 
 #========== PDF FUNCTIONS ==========
@@ -18,12 +19,12 @@ def get_nearby_text_from_block(page, block, expand):
     # Creates a bbox that represents the image
     bbox = fitz.Rect(block["bbox"])
     # Expands the regions based on the expand value
-    region = bbox + (-expand, -expand, expand, expand)
+    region = bbox + (0, 0, 0, +expand)
     # Retrieves the relevant text in the region
     nearby_text = page.get_textbox(region).strip()
     return nearby_text
 
-def get_results_from_blocks(doc, expand, zoom, output_dir):
+def get_results_from_blocks(doc, expand, zoom, output_dir, pdf_path):
     results = []
     # Iterates every document page
     for page_number in range(len(doc)):
@@ -64,6 +65,7 @@ def get_results_from_blocks(doc, expand, zoom, output_dir):
                         "x1": bbox.x1,
                         "y1": bbox.y1,
                     },
+                    "filename": pdf_path.split('/')[-1],
                     "page_number": page_number + 1
                 })
 
@@ -91,8 +93,20 @@ def extract_images_and_text_pdf(pdf_path, expand=7, zoom=3):
     doc = fitz.open(pdf_path)
 
     # Iterates every document page
-    results = get_results_from_blocks(doc, expand, zoom, output_dir)
+    results = get_results_from_blocks(doc, expand, zoom, output_dir, pdf_path)
 
     # Closes the document
     doc.close()
     return results
+
+class DocumentProcessor(ABC):
+    @abstractmethod
+    def extract_images_and_text(self, file_path, expand=7, zoom=3):
+        pass
+
+
+class PDFProcessor(DocumentProcessor):
+    @abstractmethod
+    def extract_images_and_text(self, pdf_path, expand=7, zoom=3):
+        extract_images_and_text_pdf(pdf_path, expand, zoom)
+

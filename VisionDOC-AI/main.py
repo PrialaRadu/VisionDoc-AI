@@ -1,3 +1,5 @@
+import os
+import timeit
 import box
 import yaml
 from dotenv import find_dotenv, load_dotenv
@@ -33,33 +35,47 @@ def display_image(path):
 
 
 def main_program():
+    start = timeit.default_timer()
+    # print("   Setup DBQA...")
     dbqa = setup_dbqa(qa_template, build_llm)
-    role = access()
-    file = input("Enter document name (e.g.: 'Cayenne_Turbo_2006.pdf'): ")
+    # print(f"[TIME] Setup: {timeit.default_timer() - start:.2f} seconds") if role == 'tester' else None
+
+    files = os.listdir('extraction/data')
+    for file in files:
+        print(file)
+        build_vector_index(file)
+    print(f"[TIME] Vector Build: {timeit.default_timer() - start:.2f} seconds")
     while True:
         query = input("Enter your image query: ")
         if query.lower() == 'exit':
             break
 
-        build_vector_index(file)
-        path, description = get_image(query, file)
+        start = timeit.default_timer()
+        path, description, filename, page = get_image(query)
+        print(f"[TIME] Image Retrieval: {timeit.default_timer() - start:.2f} seconds")
 
         display_image(path)
 
-        if role == 'admin':
-            print(f"Description: {description.split("\n")[-1]}")
-            print(f"Path: {path}")
+        print(f"Description: {description.split("\n")[-1]}")
+        print(f"Path: {path}")
+        print(f"Filename: {filename}")
+        print(f"Page: {page}") if page != 0 else None
 
         prompt = (
             f"The user asked: '{query}'.\n"
-            f"Here's the description: '{description.split('\n')[-1]}'.\n"
-            f"Craft a descriptive response using the whole description. Start your response with something like "
-            f"'The description you asked for is ', or alternatively, use phrases like "
-            f"'What you were looking for is ' or 'Here’s the information you need:'.\n"
+            f"Here’s the description you can use: '''{description}'''.\n\n"
+            f"Write a descriptive response (around 40 words) that explains what the image shows. "
+            f"Start the response with a phrase like 'The image you asked for is', 'What you were looking for is', or 'Here’s the information you need:'. "
+            f"Make sure the explanation is clear, informative, and not just a label.\n"
+            f"After that, mention where the image was found: either just the filename if page = 0, or 'filename, on page X' otherwise.\n\n"
+            f"The filename is: {filename}\n"
+            f"The page is: {page}"
         )
-        print("**Retrieving LLM response...**")
+        print("   Retrieving LLM response...")
+        start = timeit.default_timer()
         response = dbqa.invoke({'query': prompt})
         print(response['result'])
+        print(f"[TIME] LLM Response: {timeit.default_timer() - start:.2f} seconds")
         print()
 
 

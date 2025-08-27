@@ -1,7 +1,0 @@
-users:
-  user1:
-    password: $2b$12$qZkMpGSa/8KdbuGc7qh5jeql8TGda98zFcYldff4oc1pzynRxn/8.
-    role: admin
-  user2:
-    password: $2b$12$fgYgMUJhUrzarQjuQ/imi.VxRgvNY2rT7LS2gwKTzoIX8FyRgR97W
-    role: viewer

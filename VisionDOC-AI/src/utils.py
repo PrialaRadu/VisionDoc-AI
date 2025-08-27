@@ -1,18 +1,10 @@
-'''
-===========================================
-        Module: Util functions
-===========================================
-'''
 import box
 import yaml
-
 from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_community.llms import CTransformers
-from src.prompts import qa_template
-from src.llm import build_llm
+
 
 def load_config():
     with open('config/config.yml', 'r', encoding='utf8') as ymlfile:

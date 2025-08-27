@@ -7,7 +7,7 @@ from docx2txt import docx2txt
 
 def save_docx_images(docx_path):
     # Prepares output directory
-    filename = docx_path.split('/')[-1]
+    filename = docx_path.split('/')[-1].split('.')[0]
     output_dir = "data/" + filename + "/images"
     os.makedirs(output_dir, exist_ok=True)
     # Saves images from docx into desired directory
@@ -21,8 +21,12 @@ def retrieve_first_sentence_after_img(block):
         # Searches all sentences
         span_match = re.search(r'<span[^>]*>(.*?)</span>', block)
         # Retrieves the first sentence found
-        first_span_text = span_match.group(1).strip().split('.')[0]
-        return first_span_text
+        if span_match is not None:
+            first_span_text = span_match.group(1).strip().split('.')[0]
+            return first_span_text
+        else:
+            return ""
+
     else:
         return None
 
@@ -34,7 +38,8 @@ def extract_images_and_text_docx(docx_path):
 
     returns: a list of dict objects, containing information (image_path, nearby_text) for each image
     """
-    directory = "data/" + docx_path.split('/')[-1] + "/images"
+    filename = docx_path.split('/')[-1]
+    directory = "data/" + filename + "/images/"
 
     # Saves images
     save_docx_images(docx_path)
@@ -58,7 +63,10 @@ def extract_images_and_text_docx(docx_path):
         # Appends the relevant attributes to the result list, as a dict object
         results.append({
             "image_path": directory + image_name,
-            "nearby_text": nearby_text
+            "nearby_text": nearby_text,
+            "filename": docx_path.split('/')[-1]
         })
 
     return results
+
+

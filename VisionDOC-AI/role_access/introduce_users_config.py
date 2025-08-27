@@ -7,7 +7,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def generate_hash(password):
     return pwd_context.hash(password)
 
-def save_user_hashes(users, filepath='config/users.yml'):
+def save_user_hashes(users, filepath="users.yml"):
     data = {'users': {}}
 
     for username, (password, role) in users.items():
@@ -22,9 +22,9 @@ def save_user_hashes(users, filepath='config/users.yml'):
 
 if __name__ == "__main__":
     users_to_add = {
-        'user1': ('user1pwd', 'admin'),
-        'user2': ('user2pwd', 'viewer'),
+        'admin': ('adminpwd', 'admin'),
+        'tester': ('testerpwd', 'tester'),
+        'user': ('userpwd', 'user'),
     }
 
     save_user_hashes(users_to_add)
-    print(f"Hashes generate și salvate în 'config/users.yml'")
