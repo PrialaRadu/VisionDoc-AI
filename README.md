@@ -21,7 +21,7 @@ A description for each image is also created. Whenever the user asks for an imag
 ![Project Purpose Image 3](explanation/projectpurpose3.png)
 
 The projects supports Q&A retrieval on multiple docx and pdf files.
-![Porject Purpose Image 4](explanation/projectpurpose4.png)
+![Project Purpose Image 4](explanation/projectpurpose4.png)
 
 # LOGIC:
 ![Workflow Image](explanation/workflow.png)
