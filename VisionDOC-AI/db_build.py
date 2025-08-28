@@ -50,38 +50,44 @@ def index_all_documents():
     for file in files:
         build_vector_index(file)
 
-def get_image(query):
-    """
-    Receives the user query and retrieves the best image from the vector store, returning its path and description
-    param: query (user query for interrogation)
-    param: file (name of the document file)
-    """
-    embeddings = HuggingFaceEmbeddings(
-        model_name='sentence-transformers/all-MiniLM-L6-v2',
-        model_kwargs={'device': 'cpu'}
-    )
+class ImageRetriever:
+    def __init__(self, vectorstore_path="vectorstore/db_faiss"):
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name='sentence-transformers/all-MiniLM-L6-v2',
+            model_kwargs={'device': 'cpu'}
+        )
+        self.vectorstore_path = vectorstore_path
+        self.vector_store = FAISS.load_local(
+            self.vectorstore_path,
+            self.embeddings,
+            allow_dangerous_deserialization=True
+        )
 
-    # Loads the local vectorstore using the embeddings
-    vector_store = FAISS.load_local("vectorstore/db_faiss", embeddings, allow_dangerous_deserialization=True)
-    # Retrieves the result of the desired image
-    results = vector_store.similarity_search(query, k=1)
+    def get_image(self, query):
+        """
+        Receives a user query and retrieves the best matching image info.
+        Returns a tuple: (image_path, description, filename, page)
+        """
+        results = self.vector_store.similarity_search(query, k=1)
 
-    pth = ''
-    description = ''
-    filename = ''
-    page = ''
-    # Retrieves the description and path of the desired image
-    for doc in results:
-        content = json.loads(doc.page_content)
-        description = content['text']
-        pth = content['metadata']['image_path']
-        filename = content['metadata']['filename']
-        if filename.endswith('.pdf'):
-            page = pth.split('\\')[-1].split('_')[0][-1]
-        else:
-            page = 0
+        pth = ''
+        description = ''
+        filename = ''
+        page = 0
 
-    return pth, description, filename, page
+        for doc in results:
+            content = json.loads(doc.page_content)
+            description = content['text']
+            pth = content['metadata']['image_path']
+            filename = content['metadata']['filename']
+
+            if filename.endswith('.pdf'):
+                # Extract page number from path assuming a naming convention
+                page = int(pth.split('\\')[-1].split('_')[0][-1])
+            else:
+                page = 0
+
+        return pth, description, filename, page
 
 
 if __name__ == "__main__":

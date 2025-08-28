@@ -34,7 +34,7 @@ def display_image(path):
     plt.show()
 
 
-def main_program():
+def main_program(role):
     start = timeit.default_timer()
     # print("   Setup DBQA...")
     dbqa = setup_dbqa(qa_template, build_llm)
@@ -80,4 +80,5 @@ def main_program():
 
 
 if __name__ == "__main__":
-    main_program()
+    role = access()
+    main_program(role)

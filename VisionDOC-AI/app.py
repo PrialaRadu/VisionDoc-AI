@@ -3,11 +3,17 @@ import os
 import streamlit as st
 from dotenv import load_dotenv, find_dotenv
 from src.utils import setup_dbqa
-from db_build import get_image, build_vector_index
+from db_build import build_vector_index, ImageRetriever
 from role_access.access_permissions import access
 from src.prompts import qa_template
 from src.llm import build_llm
 from PIL import Image
+from role_access.access_permissions import access_streamlit
+
+authenticated, role = access_streamlit()
+
+if not authenticated:
+    st.stop()
 
 # Load env
 load_dotenv(find_dotenv())
@@ -51,7 +57,8 @@ if query:
         st.markdown(query)
 
     with st.spinner("🔍 Searching relevant image..."):
-        path, description, filename, page = get_image(query)
+        retriever = ImageRetriever()
+        path, description, filename, page = retriever.get_image(query)
 
     # Display assistant response
     with st.chat_message("assistant"):

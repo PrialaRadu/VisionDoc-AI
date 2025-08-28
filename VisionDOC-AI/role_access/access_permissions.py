@@ -32,3 +32,25 @@ def access():
         print('failed!')
         exit(1)
     return role
+
+def access_streamlit():
+    import streamlit as st
+
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+        st.session_state.role = None
+
+    if not st.session_state.authenticated:
+        st.subheader("🔐 Please login to continue")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+
+        if st.button("Login"):
+            role = authenticate(username, password)
+            if role:
+                st.session_state.authenticated = True
+                st.session_state.role = role
+            else:
+                st.error("❌ Authentication failed. Please try again.")
+
+    return st.session_state.authenticated, st.session_state.role
