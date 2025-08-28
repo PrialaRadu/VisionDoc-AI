@@ -37,4 +37,4 @@ Step 3: Run db_build.py (storing information into vectorstore)
 Step 4: Run app.py for web chatbot interface
 
 - use user: 'admin' and password: 'adminpwd' for admin permissions
-- now, you can ask the model about any image that exists in any documents
+- now, you can ask the model about any image that exists in documents
