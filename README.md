@@ -34,7 +34,7 @@ Step 2: Run extraction/documents_extraction.py (extracts information about docum
 
 Step 3: Run db_build.py (storing information into vectorstore)
 
-Step 4: Run main.py for console application / Run app.py for web chatbot interface
+Step 4: Run app.py for web chatbot interface
 
 - use user: 'admin' and password: 'adminpwd' for admin permissions
 - now, you can ask the model about any image that exists in any documents
